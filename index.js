@@ -26,11 +26,28 @@ async function run() {
             res.send(cars);
         })
 
+        // get single car API by id
         app.get('/car/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
             const car = await carCollection.findOne(query);
             res.send(car)
+        })
+
+        // update a car 
+        app.put('/car/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateCar = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: updateCar.quantity,
+                    sold: updateCar.sold
+                }
+            };
+            const result = await carCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
         })
     }
     finally {
