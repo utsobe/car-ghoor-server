@@ -20,10 +20,20 @@ async function run() {
 
         // Car API
         app.get('/car', async (req, res) => {
-            const query = {};
-            const cursor = carCollection.find(query);
-            const cars = await cursor.toArray();
-            res.send(cars);
+            if (req.query.email) {
+                console.log(req.query);
+                const email = req.query.email;
+                const query = { email };
+                const cursor = carCollection.find(query);
+                const cars = await cursor.toArray();
+                res.send(cars);
+            }
+            else {
+                const query = {};
+                const cursor = carCollection.find(query);
+                const cars = await cursor.toArray();
+                res.send(cars);
+            }
         })
 
         // get single car API by id
